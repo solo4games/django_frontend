@@ -1,0 +1,95 @@
+/* Общие стили */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fef7e6; /* Светлый фон для всего сайта */
+    color: #333;
+}
+
+/* Стили хедера и навигации */
+header {
+    background-color: #ff8c42; /* Оранжевый цвет для фона навигации */
+    padding: 10px 20px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-between; /* Равномерное распределение элементов */
+    align-items: center;
+}
+
+header nav ul li {
+    margin: 0 15px;
+}
+
+header nav ul li a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+header nav ul li a:hover {
+    background-color: #e86b1a; /* Темный оттенок оранжевого при наведении */
+}
+
+/* Выравнивание ссылки на вход */
+header nav ul li.right {
+    margin-left: auto;
+}
+
+/* Стили основного контента */
+main {
+    padding: 20px;
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #fff; /* Белый фон для контента */
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+main h1 {
+    color: #ff8c42;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+main p {
+    line-height: 1.6;
+    margin-bottom: 20px;
+    text-align: justify;
+}
+
+/* Стили для изображения */
+main img {
+    display: block;
+    max-width: 100%; /* Уменьшение изображения до ширины контейнера */
+    height: auto; /* Сохранение пропорций изображения */
+    margin: 0 auto 20px; /* Центрирование изображения */
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Стили футера */
+footer {
+    background-color: #ff8c42;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    margin-top: 20px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+footer p {
+    margin: 0;
+}

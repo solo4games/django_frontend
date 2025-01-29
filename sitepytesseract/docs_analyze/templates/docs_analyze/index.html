@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<ul class="list-docs">
+    {% for doc in docs %}
+        <li><div class="doc-panel">
+            <img src="/{{ doc.file_path }}" alt="Картинка отсутсвует в папке Media(">
+            <p class="doc-id">ID: {{ doc.id }}</p>
+            <p class="doc-size">Size: {{ doc.size }}</p>
+            </div>
+            <a href="{% url 'get_text' doc.id %}">Прочитать текст</a>
+            {% if user.is_superuser %}
+            <a href="{% url 'delete' doc.id %}">Удалить картинку</a>
+            {% endif %}
+            {% if user.is_authenticated %}
+            <a href="{% url 'analyze_doc' doc.id %}">Анализировать текст</a>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

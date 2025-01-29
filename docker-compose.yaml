@@ -1,0 +1,17 @@
+services:
+
+  app_front:
+    container_name: my_project_front_app
+    build:
+      context: .
+    env_file:
+      - .env-docker
+    command: ["/django_frontend/for_docker/app.sh"]
+    ports:
+      - "9001:8001"
+    networks:
+      - project_shared_network
+
+networks:
+  project_shared_network:
+    external: true
