@@ -1,17 +1,14 @@
 import os
 
 from django.db import models
-from django.contrib.auth.models import AbstractUser
 from django.http.response import Http404, HttpResponse
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
 from django.template.loader import render_to_string
 
 from . import service_api
 
 # Create your models here.
-
-class User(AbstractUser):
-    pass
 
 
 class Docs(models.Model):
@@ -47,7 +44,7 @@ class Price(models.Model):
 
 class Cart(models.Model):
 
-    user_id = models.ForeignKey('User', on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     doc_id = models.ForeignKey('Docs', on_delete=models.CASCADE)
     order_price = models.FloatField(default=0.0)
     payment = models.BooleanField(default=False)

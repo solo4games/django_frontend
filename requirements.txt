@@ -2,8 +2,12 @@ asgiref==3.8.1
 certifi==2024.12.14
 charset-normalizer==3.4.1
 Django==4.2.1
+django-prometheus==2.3.1
 idna==3.10
+kafka-python==2.0.2
+kafka-python-ng==2.2.3
 pillow==11.1.0
+prometheus_client==0.21.1
 psycopg2-binary==2.9.10
 python-decouple==3.8
 requests==2.32.3

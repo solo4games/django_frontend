@@ -1,3 +1,5 @@
+import requests
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.uploadedfile import UploadedFile
 from django.core.handlers.wsgi import WSGIRequest
@@ -27,7 +29,7 @@ class DocsHome(ListView):
     model = Docs
 
 
-class UploadDocs(LoginRequiredMixin, FormView):
+class UploadDocs(service_api.JWTView, LoginRequiredMixin, FormView):
     """
         Представление для загрузки документа.
         Для загрузки необходимо быть авторизованным
@@ -99,7 +101,7 @@ class GetTextDocs(TemplateView):
         return super().get(request, *args, **kwargs)
 
 
-class DeleteDocs(LoginRequiredMixin, DeleteView):
+class DeleteDocs(service_api.JWTView, LoginRequiredMixin, DeleteView):
     """
         Представление для удаления документа.
         Для удаления необходимо быть авторизованным под админом
@@ -122,7 +124,7 @@ class DeleteDocs(LoginRequiredMixin, DeleteView):
         return super().form_valid(form)
 
 
-class AnalyzeDocs(LoginRequiredMixin, FormView):
+class AnalyzeDocs(service_api.JWTView, LoginRequiredMixin, FormView):
     """
         Представление для анализа документа.
         Для анализа необходимо быть авторизованным.

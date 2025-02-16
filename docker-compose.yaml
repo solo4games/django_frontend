@@ -1,6 +1,6 @@
 services:
 
-  app_front:
+  appfront:
     container_name: my_project_front_app
     build:
       context: .
