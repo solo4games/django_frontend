@@ -1,3 +1,8 @@
+volumes:
+  cashed_data:
+  log_data:
+    name: log_data
+
 services:
 
   appfront:
@@ -9,9 +14,23 @@ services:
     command: ["/django_frontend/for_docker/app.sh"]
     ports:
       - "9001:8001"
+    volumes:
+      - log_data:/django_frontend/sitepytesseract/logs
     networks:
-      - project_shared_network
+      - django_shared_network
+
+  redis:
+    image: redis:7
+    container_name: redis_docs
+    restart: always
+    ports:
+      - '6379:6379'
+    volumes:
+      - cashed_data:/data
+    networks:
+      - django_shared_network
+
 
 networks:
-  project_shared_network:
+  django_shared_network:
     external: true

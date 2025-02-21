@@ -26,8 +26,6 @@ class LoginUser(LoginView):
         proxi_response = requests.post(proxi_url + 'token/',
                                       json={'username': username, 'password': password})
 
-        print(proxi_response.status_code)
-        print(proxi_response.json())
         if proxi_response.status_code == 200:
             proxi_json_response = proxi_response.json()
             response.set_cookie('access_token', proxi_json_response['access'],
@@ -52,7 +50,7 @@ class LogoutUser(LogoutView):
     def dispatch(self, request, *args, **kwargs):
         response = super().dispatch(request, *args, **kwargs)
 
-        response.delete_cookie('access_token')
-        response.delete_cookie('refresh_token')
+        response.delete_cookie('access_token', path='/')
+        response.delete_cookie('refresh_token', path='/')
 
         return response

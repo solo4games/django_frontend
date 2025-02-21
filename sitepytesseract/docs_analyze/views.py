@@ -1,10 +1,11 @@
 import requests
 
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.files.uploadedfile import UploadedFile
 from django.core.handlers.wsgi import WSGIRequest
 from django.forms.forms import Form
-from django.http.response import HttpResponseNotFound
+from django.http.response import HttpResponseNotFound, Http404
+from django.shortcuts import get_object_or_404
 from django.urls.base import reverse_lazy
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView, DeleteView
@@ -101,7 +102,7 @@ class GetTextDocs(TemplateView):
         return super().get(request, *args, **kwargs)
 
 
-class DeleteDocs(service_api.JWTView, LoginRequiredMixin, DeleteView):
+class DeleteDocs(service_api.JWTView, UserPassesTestMixin, DeleteView):
     """
         Представление для удаления документа.
         Для удаления необходимо быть авторизованным под админом
@@ -109,6 +110,9 @@ class DeleteDocs(service_api.JWTView, LoginRequiredMixin, DeleteView):
     model = Docs
     template_name = 'docs_analyze/check_delete.html'
     success_url = reverse_lazy('home')
+
+    def test_func(self):
+        return self.request.user.is_superuser
 
     def form_valid(self, form: Form):
         """
@@ -143,7 +147,11 @@ class AnalyzeDocs(service_api.JWTView, LoginRequiredMixin, FormView):
         """
         doc_id = self.kwargs['doc_id']
 
-        doc = Docs.objects.get(id=doc_id)
+        try:
+            doc = get_object_or_404(Docs, id=doc_id)
+        except Http404:
+            return service_api.api_error_handler(500, 'Такого документа для анализа нет')
+
         try:
             Cart.objects.all().create(user_id=self.request.user, doc_id=doc).save()
         except ValueError as e:

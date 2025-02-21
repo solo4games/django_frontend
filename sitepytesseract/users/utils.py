@@ -4,7 +4,7 @@ from django.core.files.uploadedfile import UploadedFile
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 
-proxi_url = 'http://proxi:8002/api/v1/'
+proxi_url = 'http://nginx:80/api/v1/'
 
 def api_error_handler(status_code, message):
     context_error = {'status_code': status_code, 'message': message}

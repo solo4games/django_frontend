@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
+
 from pathlib import Path
 from decouple import config
 
@@ -20,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-cajf+q=r!*!*b=yq8l$3up2)wipy6f84ll@ycy6jh(szuviu)q'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
@@ -39,11 +41,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'docs_analyze.apps.DocsAnalyzeConfig',
     'users.apps.UsersConfig',
-    # 'django_prometheus',
+    'django_prometheus',
 ]
 
 MIDDLEWARE = [
-    # 'django_prometheus.middleware.PrometheusBeforeMiddleware',
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -51,8 +53,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'django_prometheus.middleware.PrometheusAfterMiddleware',
-    # 'sitepytesseract.middleware.StatisticsMiddleware',
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
+    'sitepytesseract.middleware.StatisticsMiddleware',
 ]
 
 ROOT_URLCONF = 'sitepytesseract.urls'
@@ -140,3 +142,70 @@ LOGIN_URL = 'users:login'
 
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://redis:6379',
+    }
+}
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'formatters': {
+#         'loki': {
+#             'class': 'logging.Formatter',  # required
+#             'datefmt': '%Y-%m-%d %H:%M:%S',  # optional, default is '%Y-%m-%d %H:%M:%S'
+#         },
+#     },
+#     'handlers': {
+#         'loki': {
+#             'level': 'DEBUG',  # required
+#             'class': 'django_loki.LokiHttpHandler',  # required
+#             'host': 'http://loki',  # required, your grafana/Loki server host, e.g:192.168.57.242
+#             'formatter': 'loki',  # required, loki formatter,
+#             'port': 3100,  # optional, your grafana/Loki server port, default is 3100
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['loki'],
+#             'level': 'INFO',
+#             'propagate': False,
+#         }
+#     },
+# }
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'trace_formatter': {
+            'datefmt': '%Y-%m-%d %H:%M:%S',  # optional, default is '%Y-%m-%d %H:%M:%S'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'formatter': 'trace_formatter',
+            'filename': os.path.join(BASE_DIR, 'logs', 'django_front.log')
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'trace_formatter',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+    'root': {
+        'handlers': ['console', 'file'],
+        'level': 'WARNING',
+    },
+}
